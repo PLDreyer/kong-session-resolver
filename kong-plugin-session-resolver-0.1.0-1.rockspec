@@ -18,6 +18,7 @@ description = {
 }
 
 dependencies = {
+    "lua-resty-http >= 0.08"
 }
 
 
@@ -26,5 +27,7 @@ build = {
   modules = {
     ["kong.plugins."..plugin_name..".handler"] = "kong/plugins/"..plugin_name.."/handler.lua",
     ["kong.plugins."..plugin_name..".schema"] = "kong/plugins/"..plugin_name.."/schema.lua",
+    ["kong.plugins."..plugin_name..".resolver"] = "kong/plugins/"..plugin_name.."/resolver.lua",
+    ["kong.plugins."..plugin_name..".utils"] = "kong/plugins/"..plugin_name.."/utils.lua"
   }
 }
