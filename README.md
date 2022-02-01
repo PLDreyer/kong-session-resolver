@@ -6,6 +6,7 @@ Used to get user information about a resolved customer-id
 Features
 =================================
   - dynamic request method
+  - choose header value to resolve session with
   - dynamic introspection endpoint
   - optionally append headers to request
   - choose upstream header for session
@@ -23,7 +24,13 @@ local config = {
     -- GET / POST / PUT / PATCH / DELETE / OPTIONS
     request_method = "GET", -- DEFAULT
 
-    -- introspeciton_endpoint -> introspection_endpoint + "/" + x-consumer-custom-id
+    -- header with value to resolve session with
+    header_to_resolve = "X-Consumer-Custom-ID", -- DEFAULT
+
+    -- timeout for introspection request in ms
+    introspection_timeout_ms = 2000, -- DEFAULT
+
+    -- introspection endpoint -> introspection_endpoint + "/" + x-consumer-custom-id
     introspection_endpoint = "https://example.introspection.page/with/path",
 
     request_headers_to_append = {
@@ -31,7 +38,7 @@ local config = {
         "X-Example-Two:Value2"
     },
 
-    -- place resolved session in choosen upstream header
+    -- place resolved session in chosen upstream header
     upstream_session_header = "X-Session-Header",
 
     -- choose nested response property as upstream value

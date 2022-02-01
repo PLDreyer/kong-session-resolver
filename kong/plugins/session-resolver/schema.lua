@@ -23,7 +23,21 @@ local schema = {
             request_method = {
               type = "string",
               default = "GET",
-              required = true
+              required = true,
+            }
+          },
+          {
+            header_to_resolve = {
+              type = "string",
+              default = "X-Consumer-Custom-ID",
+              required = true,
+            }
+          },
+          {
+            introspection_timeout_ms = {
+              type = "number",
+              default = 2000,
+              required = true,
             }
           },
           {
@@ -37,19 +51,19 @@ local schema = {
               type = "array",
               default = {},
               required = true,
-              elements = { type = "string", match = "^([^:]+):*(.-)$", custom_validator = validate_headers }
+              elements = { type = "string", match = "^([^:]+):*(.-)$", custom_validator = validate_headers },
             }
           },
           {
             upstream_session_header = {
               type = "string",
-              required = true
+              required = true,
             },
           },
           {
             response_body_property_to_use = {
               type = "string",
-              required = true
+              required = true,
             }
           }
         },

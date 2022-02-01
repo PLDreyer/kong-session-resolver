@@ -23,6 +23,9 @@ end
 -- parse plugin config
 function M.get_options(plugin_conf)
  local options = {
+    request_method = plugin_conf.request_method,
+    header_to_resolve = plugin_conf.header_to_resolve,
+    introspection_timeout_ms = plugin_conf.introspection_endpoint_ms,
     introspection_endpoint = plugin_conf.introspection_endpoint,
     request_headers_to_append = parse_headers(plugin_conf.request_headers_to_append),
     upstream_session_header = plugin_conf.upstream_session_header,
@@ -33,17 +36,17 @@ function M.get_options(plugin_conf)
 end
 
 -- make http request to introspection endpoint
-function M.make_request(x_consumer_custom_id, method, introspection_endpoint, headers, timeout)
+function M.make_request(header_value, request_method, introspection_endpoint, request_headers, introspection_timeout_ms)
   local httpc = http.new()
-  httpc:set_timeout(timeout)
-  kong.log.debug("Timeout for session request: "..timeout)
+  httpc:set_timeout(introspection_timeout_ms)
+  kong.log.debug("Timeout for session request: "..introspection_timeout_ms)
 
-  local request_uri = introspection_endpoint.."/"..x_consumer_custom_id
+  local request_uri = introspection_endpoint.."/"..header_value
   kong.log.debug("Introspection endpoint for session request: "..request_uri)
 
   local res, err = httpc:request_uri(request_uri, {
-    method = method,
-    headers = headers,
+    method = request_method,
+    headers = request_headers,
   })
   M.debug_log_table("Response session request: ", res)
   M.debug_log_table("Error session request: ", err)

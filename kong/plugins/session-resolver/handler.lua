@@ -8,15 +8,15 @@ local plugin = {
 }
 
 function plugin:access(plugin_conf)
-  local x_consumer_custom_id = kong.request.get_header("X-Consumer-Custom-ID")
+  local resolver_config = utils.get_options(plugin_conf)
 
-  if x_consumer_custom_id == nil then
+  local header_value = kong.request.get_header(resolver_config.header_to_resolve)
+  if header_value == nil then
     kong.log.warn("No 'X-Consumer-Custom-ID' for session resolver found")
     return
   end
 
-  local resolver_config = utils.get_options(plugin_conf)
-  resolver.resolve_session(resolver_config, x_consumer_custom_id)
+  resolver.resolve_session(resolver_config, header_value)
 end
 
 return plugin
