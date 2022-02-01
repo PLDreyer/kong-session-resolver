@@ -70,7 +70,7 @@ function M.inject_header(res, upstream_session_header, response_body_property_to
     if response_value[k] == nil then
       kong.log.warn("Property '"..k.."' does not exists on response")
       kong.log.warn("Set upstream session header to nil")
-      response_value = nil
+      response_value = "nil"
       break
     end
     response_value = response_value[k]
