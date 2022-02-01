@@ -21,7 +21,7 @@ Configuration
 -------
 ```lua
 local config = {
-    -- GET / POST / PUT / PATCH / DELETE / OPTIONS
+    -- GET / POST / PUT / PATCH / DELETE
     request_method = "GET", -- DEFAULT
 
     -- header with value to resolve session with
@@ -30,7 +30,7 @@ local config = {
     -- timeout for introspection request in ms
     introspection_timeout_ms = 2000, -- DEFAULT
 
-    -- introspection endpoint -> introspection_endpoint + "/" + x-consumer-custom-id
+    -- introspection endpoint -> introspection_endpoint + "/" + header_to_resolve
     introspection_endpoint = "https://example.introspection.page/with/path",
 
     request_headers_to_append = {
