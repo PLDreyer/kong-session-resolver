@@ -25,7 +25,7 @@ function M.get_options(plugin_conf)
  local options = {
     request_method = plugin_conf.request_method,
     header_to_resolve = plugin_conf.header_to_resolve,
-    introspection_timeout_ms = plugin_conf.introspection_endpoint_ms,
+    introspection_timeout_ms = plugin_conf.introspection_timeout_ms,
     introspection_endpoint = plugin_conf.introspection_endpoint,
     request_headers_to_append = parse_headers(plugin_conf.request_headers_to_append),
     upstream_session_header = plugin_conf.upstream_session_header,
@@ -39,10 +39,10 @@ end
 function M.make_request(header_value, request_method, introspection_endpoint, request_headers, introspection_timeout_ms)
   local httpc = http.new()
   httpc:set_timeout(introspection_timeout_ms)
-  kong.log.debug("Timeout for session request: "..introspection_timeout_ms)
+  kong.log.debug("Timeout for session request: ", introspection_timeout_ms)
 
   local request_uri = introspection_endpoint.."/"..header_value
-  kong.log.debug("Introspection endpoint for session request: "..request_uri)
+  kong.log.debug("Introspection endpoint for session request: ", request_uri)
 
   local res, err = httpc:request_uri(request_uri, {
     method = request_method,
@@ -68,7 +68,7 @@ function M.inject_header(res, upstream_session_header, response_body_property_to
   M.debug_log_table("Response body: ", response_value)
   for k in string.gmatch(response_body_property_to_use, "[^%.]+") do
     if response_value[k] == nil then
-      kong.log.warn("Property '"..k.."' do not exist on response")
+      kong.log.warn("Property '"..k.."' does not exists on response")
       kong.log.warn("Set upstream session header to nil")
       response_value = nil
       break

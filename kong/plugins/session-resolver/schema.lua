@@ -24,6 +24,13 @@ local schema = {
               type = "string",
               default = "GET",
               required = true,
+              one_of = {
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+              }
             }
           },
           {
