@@ -11,7 +11,7 @@ local function parse_headers(headers_to_append)
   M.debug_log_table("Generate header table from array for session request: ", headers_to_append)
   for _, header in pairs(headers_to_append) do
     for k, v in string.gmatch(header, "([^:]+):(.+)") do
-      if not k == nil and not v == nil then
+      if k and v then
         header_table[k] = v
       end
     end
@@ -48,16 +48,16 @@ function M.make_request(header_value, request_method, introspection_endpoint, re
     method = request_method,
     headers = request_headers,
   })
-  M.debug_log_table("Response session request: ", res)
-  M.debug_log_table("Error session request: ", err)
+  M.debug_log_table("Response from session request: ", res)
+  M.debug_log_table("Error from session request: ", err)
 
   return res, err
 end
 
 -- receive property from response and inject in header
 function M.inject_header(res, upstream_session_header, response_body_property_to_use)
-  if res == nil then
-    kong.log.warn("Response from session request is nil")
+  if res == nil or res.body == "" or res.status == 401 or res.status == 403 then
+    kong.log.warn("Response or body from session request is nil")
     local value = ngx.encode_base64("nil")
     kong.log.warn("Set upstream session header to nil")
     kong.service.request.set_header(upstream_session_header, value)
@@ -81,6 +81,7 @@ function M.inject_header(res, upstream_session_header, response_body_property_to
   kong.service.request.set_header(upstream_session_header, value)
 end
 
+-- wrapper to log kong.inspect on debug
 function M.debug_log_table(...)
   local log_level = errlog.get_sys_filter_level()
   if log_level == ngx_DEBUG then
