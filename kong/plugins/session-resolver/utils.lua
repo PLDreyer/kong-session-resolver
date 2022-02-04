@@ -9,7 +9,7 @@ local ngx_DEBUG = ngx.DEBUG
 local function parse_headers(headers_to_append)
   local header_table = {}
   M.debug_log_table("Generate header table from array for session request: ", headers_to_append)
-  for _, header in pairs(headers_to_append) do
+  for _, header in ipairs(headers_to_append) do
     for k, v in string.gmatch(header, "([^:]+):(.+)") do
       if k and v then
         header_table[k] = v
